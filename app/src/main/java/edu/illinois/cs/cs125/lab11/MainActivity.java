@@ -3,6 +3,8 @@ package edu.illinois.cs.cs125.lab11;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +26,9 @@ public final class MainActivity extends AppCompatActivity {
     /** Request queue for our API requests. */
     private static RequestQueue requestQueue;
 
+
+    private TextView textView;
+    private Button button;
     /**
      * Run when this activity comes to the foreground.
      *
@@ -38,7 +43,13 @@ public final class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        startAPICall("192.17.96.8");
+        textView = findViewById(R.id.textView);
+
+        button = findViewById(R.id.button);
+        button.setOnClickListener(v -> {
+            Log.d(TAG, "Shift up button clicked");
+            startAPICall("192.17.96.8");
+        });
     }
 
     /**
@@ -71,6 +82,7 @@ public final class MainActivity extends AppCompatActivity {
                             Log.e(TAG, error.toString());
                         }
                     });
+
             jsonObjectRequest.setShouldCache(false);
             requestQueue.add(jsonObjectRequest);
         } catch (Exception e) {
@@ -88,6 +100,8 @@ public final class MainActivity extends AppCompatActivity {
             Log.d(TAG, response.toString(2));
             // Example of how to pull a field off the returned JSON object
             Log.i(TAG, response.get("hostname").toString());
+            String city = response.getString("city").toString();
+            textView.setText(city);
         } catch (JSONException ignored) { }
     }
 }
