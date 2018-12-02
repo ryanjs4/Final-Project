@@ -16,7 +16,7 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/author"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:text="TextView"

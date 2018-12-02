@@ -28,6 +28,7 @@ public final class MainActivity extends AppCompatActivity {
 
 
     private TextView textView;
+    private TextView authorText;
     private Button button;
     /**
      * Run when this activity comes to the foreground.
@@ -44,11 +45,12 @@ public final class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         textView = findViewById(R.id.textView);
+        authorText = findViewById(R.id.author);
 
         button = findViewById(R.id.button);
         button.setOnClickListener(v -> {
             Log.d(TAG, "Shift up button clicked");
-            startAPICall("192.17.96.8");
+            startAPICall("");
         });
     }
 
@@ -63,13 +65,15 @@ public final class MainActivity extends AppCompatActivity {
     /**
      * Make a call to the IP geolocation API.
      *
-     * @param ipAddress IP address to look up
+     * @param category IP address to look up
      */
-    void startAPICall(final String ipAddress) {
+
+    //theysaidso.com/api/#
+    void startAPICall(final String category) {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    "https://ipinfo.io/" + ipAddress + "/json",
+                    "https://quotes.rest/qod" + category + ".json",
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -99,9 +103,12 @@ public final class MainActivity extends AppCompatActivity {
         try {
             Log.d(TAG, response.toString(2));
             // Example of how to pull a field off the returned JSON object
-            Log.i(TAG, response.get("hostname").toString());
-            String city = response.getString("city").toString();
+            //Log.i(TAG, response.get("hostname").toString());
+            String city = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("quote");
+            System.out.println(city);
+            String author = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("author");
             textView.setText(city);
+            authorText.setText(author);
         } catch (JSONException ignored) { }
     }
 }
