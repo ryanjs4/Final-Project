@@ -178,8 +178,8 @@ public final class MainActivity extends AppCompatActivity {
             String quote = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("quote");
             System.out.println(quote);
             String author = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("author");
-            quoteText.setText(quote + "~" + author);
-            authorText.setText("~" + author);
+            quoteText.setText(quote + "  " + author);
+            authorText.setText("  " + author);
         } catch (JSONException ignored) { }
     }
 
@@ -196,8 +196,8 @@ public final class MainActivity extends AppCompatActivity {
             String quote = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("quote");
             System.out.println(quote);
             String author = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("author");
-            quoteText.setText(quote + "~" + author);
-            authorText.setText("~" + author);
+            quoteText.setText(quote + "-" + author);
+            authorText.setText("-" + author);
         } catch (JSONException ignored) { }
     }
 
@@ -214,8 +214,8 @@ public final class MainActivity extends AppCompatActivity {
             String quote = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("quote");
             System.out.println(quote);
             String author = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("author");
-            quoteText.setText(quote + "~" + author);
-            authorText.setText("~" + author);
+            quoteText.setText(quote + "+" + author);
+            authorText.setText("+" + author);
         } catch (JSONException ignored) { }
     }
 }
