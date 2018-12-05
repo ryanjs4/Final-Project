@@ -17,7 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Main class for our UI design lab.
+ * Main class for our UI design.
  */
 public final class MainActivity extends AppCompatActivity {
     /** Default logging tag for messages from the main activity. */
@@ -66,26 +66,26 @@ public final class MainActivity extends AppCompatActivity {
 
         inspirational = findViewById(R.id.inspiration);
         inspirational.setOnClickListener(v -> {
-            Log.d(TAG, "Quote of the Day Button");
-            quoteOfTheDay("");
+            Log.d(TAG, "Inspiration Button");
+            categoryRequest("inspire");
         });
 
         funny = findViewById(R.id.fun);
         funny.setOnClickListener(v -> {
-            Log.d(TAG, "Quote of the Day Button");
-            quoteOfTheDay("");
+            Log.d(TAG, "Funny Button");
+            categoryRequest("funny");
         });
 
         sports = findViewById(R.id.sport);
         sports.setOnClickListener(v -> {
-            Log.d(TAG, "Quote of the Day Button");
-            quoteOfTheDay("");
+            Log.d(TAG, "Sports Button");
+            categoryRequest("sports");
         });
 
         life = findViewById(R.id.life);
         life.setOnClickListener(v -> {
-            Log.d(TAG, "Quote of the Day Button");
-            quoteOfTheDay("");
+            Log.d(TAG, "Life Button");
+            categoryRequest("life");
         });
     }
 
@@ -113,7 +113,7 @@ public final class MainActivity extends AppCompatActivity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(final JSONObject response) {
-                            quoteOfDayDone(response);
+                            quoteOfDayPrint(response);
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -134,7 +134,7 @@ public final class MainActivity extends AppCompatActivity {
      *
      * @param response response from our IP geolocation API.
      */
-    void quoteOfDayDone(final JSONObject response) {
+    void quoteOfDayPrint(final JSONObject response) {
         try {
             Log.d(TAG, response.toString(2));
             // Example of how to pull a field off the returned JSON object
@@ -142,17 +142,49 @@ public final class MainActivity extends AppCompatActivity {
             String quote = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("quote");
             System.out.println(quote);
             String author = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("author");
-            quoteText.setText(quote + "~" + author);
+            quoteText.setText(quote);
             authorText.setText("~" + author);
         } catch (JSONException ignored) { }
     }
 
+    //theysaidso.com/api/#
+
+    /**
+     * d
+     * @param category dldl.
+     */
+    void categoryRequest(final String category) {
+        try {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.GET,
+                    "http://quotes.rest/qod.json?category=" + category,
+                    null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(final JSONObject response) {
+                            System.out.println(response);
+                            categoryPrint(response);
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(final VolleyError error) {
+                    Log.e(TAG, error.toString());
+                }
+            });
+
+            jsonObjectRequest.setShouldCache(false);
+            requestQueue.add(jsonObjectRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Handle the response from our IP geolocation API.
      *
      * @param response response from our IP geolocation API.
      */
-    void inspirational(final JSONObject response) {
+    void categoryPrint(final JSONObject response) {
         try {
             Log.d(TAG, response.toString(2));
             // Example of how to pull a field off the returned JSON object
@@ -160,62 +192,8 @@ public final class MainActivity extends AppCompatActivity {
             String quote = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("quote");
             System.out.println(quote);
             String author = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("author");
-            quoteText.setText(quote + "~" + author);
+            quoteText.setText(quote);
             authorText.setText("~" + author);
-        } catch (JSONException ignored) { }
-    }
-
-    /**
-     * Handle the response from our IP geolocation API.
-     *
-     * @param response response from our IP geolocation API.
-     */
-    void funny(final JSONObject response) {
-        try {
-            Log.d(TAG, response.toString(2));
-            // Example of how to pull a field off the returned JSON object
-            //Log.i(TAG, response.get("hostname").toString());
-            String quote = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("quote");
-            System.out.println(quote);
-            String author = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("author");
-            quoteText.setText(quote + "  " + author);
-            authorText.setText("  " + author);
-        } catch (JSONException ignored) { }
-    }
-
-    /**
-     * Handle the response from our IP geolocation API.
-     *
-     * @param response response from our IP geolocation API.
-     */
-    void sports(final JSONObject response) {
-        try {
-            Log.d(TAG, response.toString(2));
-            // Example of how to pull a field off the returned JSON object
-            //Log.i(TAG, response.get("hostname").toString());
-            String quote = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("quote");
-            System.out.println(quote);
-            String author = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("author");
-            quoteText.setText(quote + "-" + author);
-            authorText.setText("-" + author);
-        } catch (JSONException ignored) { }
-    }
-
-    /**
-     * Handle the response from our IP geolocation API.
-     *
-     * @param response response from our IP geolocation API.
-     */
-    void life(final JSONObject response) {
-        try {
-            Log.d(TAG, response.toString(2));
-            // Example of how to pull a field off the returned JSON object
-            //Log.i(TAG, response.get("hostname").toString());
-            String quote = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("quote");
-            System.out.println(quote);
-            String author = response.getJSONObject("contents").getJSONArray("quotes").getJSONObject(0).getString("author");
-            quoteText.setText(quote + "+" + author);
-            authorText.setText("+" + author);
         } catch (JSONException ignored) { }
     }
 }
